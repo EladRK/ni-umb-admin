@@ -1,23 +1,8 @@
-/**
- * Created by elad.katz on 31/03/2016.
- */
 var myApp = angular.module('myApp', ['ng-admin']);
 myApp.config(['NgAdminConfigurationProvider', function (nga) {
 
-    var admin = nga.application('My First Admin')
+    var admin = nga.application('Umbrela Admin')
         .baseApiUrl('http://localhost:6007/api/v1/');
-
-    const LinkSchema = {
-        name: String,
-        productId: Number,
-        isActive: Boolean,
-        isDefault: Boolean,
-        url: String,
-        priceValue: Number,
-        priceCurrency: String,
-        oldPrice: Number,
-        priceText: String
-    };
 
     var link = nga.entity('links').identifier(nga.field('id'));
 
@@ -31,7 +16,7 @@ myApp.config(['NgAdminConfigurationProvider', function (nga) {
         nga.field('priceCurrency', 'choice')
             .choices([
                 {label: 'USD', value: 'USD'},
-                {label: 'EUR0', value: 'EURO'}
+                {label: 'EURO', value: 'EURO'}
             ]),
         nga.field('oldPrice', 'number').format('$0,0.00'),
         nga.field('priceText')
@@ -118,6 +103,35 @@ myApp.config(['NgAdminConfigurationProvider', function (nga) {
     admin.addEntity(product);
 
 
+
+
+
+
+
+    var site = nga.entity('sites').identifier(nga.field('id'));
+
+    site.listView().fields([
+        nga.field('title').isDetailLink(true),
+        nga.field('siteId', 'number')
+    ]);
+
+    site.creationView().fields([
+        nga.field('title')
+            .attributes({placeholder: 'name can only contain letters, numbers and dashes'})
+            .validation({required: true, pattern: '[a-z0-9\-]+'}),
+        nga.field('siteId', 'number')
+            .validation({required: true, pattern: '[a-z0-9\-]+'})
+    ]);
+
+    site.editionView().fields(site.creationView().fields());
+
+    site.showView().fields([
+        nga.field('name'),
+        nga.field('siteId', 'number')
+    ]);
+
+    admin.addEntity(site);
+    
     //
     //var admin = nga.application('My First Admin')
     //    .baseApiUrl('http://jsonplaceholder.typicode.com/');
