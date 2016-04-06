@@ -6,7 +6,7 @@ myApp.config(['NgAdminConfigurationProvider', function (nga) {
     var businessEntitiesApi = 'http://business-entities-bos.corp.naturalint.com/api/v1/';
     var vertigonApi = 'http://vertigon.corp.naturalint.com/api/v1/';
     //var articleApi = 'http://article-bos.corp.naturalint.com/api/v1/';
-    var articleApi = 'localhost:6006/api/v1/';
+    var articleApi = 'http://localhost:6006/api/v1/';
     var viewApi = 'http://view-bos.corp.naturalint.com/api/v1/';
 
 
@@ -136,6 +136,8 @@ myApp.config(['NgAdminConfigurationProvider', function (nga) {
     article.creationView().fields([
         nga.field('title'),
         nga.field('segmentId'),
+        nga.field('authorId'),
+        nga.field('verticalId'),
         nga.field('brief'),
         nga.field('body', 'wysiwyg'),
         nga.field('seo.index', 'boolean'),
@@ -169,13 +171,17 @@ myApp.config(function (RestangularProvider) {
         console.log(response);
         return data;
     });
-    //RestangularProvider.addFullRequestInterceptor(function(element, operation, what, url, headers, params, httpConfig) {
-    //    if (operation == 'getList' && what == 'entityName') {
-    //        params.page = params._page;
-    //        params.limit = params._perPage;
-    //        delete params._page;
-    //        delete params._perPage;
-    //    }
-    //    return { params: params };
-    //});
+    RestangularProvider.addFullRequestInterceptor(function(element, operation, what, url, headers, params, httpConfig) {
+
+        var data = element;
+        var element = {content: data};
+
+        //if (operation == 'getList' && what == 'entityName') {
+        //    params.page = params._page;
+        //    params.limit = params._perPage;
+        //    delete params._page;
+        //    delete params._perPage;
+        //}
+        return { params: params, element: element };
+    });
 });
