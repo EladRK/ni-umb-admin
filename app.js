@@ -8,8 +8,8 @@ app.use('/node_modules/ng-admin/build/', express.static(__dirname + '/node_modul
 app.use(express.static('public'));
 
 
-app.listen(3000, function () {
-    console.log('Example app listening on port 3000!');
+app.listen(9000, function () {
+    console.log('Umb-Admin: port 9000');
 });
 
 
